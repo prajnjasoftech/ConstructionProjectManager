@@ -9,9 +9,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FollowUpController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 // Guest routes (not authenticated)
 Route::middleware('guest')->group(function (): void {
@@ -97,4 +97,8 @@ Route::middleware('auth')->group(function (): void {
         Route::delete('follow-ups/{followUp}', [FollowUpController::class, 'destroyForCustomer'])->name('destroy');
         Route::post('follow-ups/{followUp}/complete', [FollowUpController::class, 'completeForCustomer'])->name('complete');
     });
+
+    // Project routes
+    Route::post('projects/{project}/status', [ProjectController::class, 'updateStatus'])->name('projects.status');
+    Route::resource('projects', ProjectController::class);
 });
