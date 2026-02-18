@@ -1,94 +1,74 @@
-# CRM Base Kit
+# Construction Project Manager
 
-A Laravel-based CRM starter kit with Leads & Customers management, built with Inertia.js and React.
+A Laravel-based construction project management system with customer portal, project tracking, and real-time updates. Built with Inertia.js and React.
 
 ## Features
 
 ### Core Modules
 
+- **Projects Management** - Track construction projects with budget, timeline, and progress
+- **Customers Management** - Manage customer information and their projects
 - **Leads Management** - Track potential customers through the sales pipeline
-- **Customers Management** - Manage converted customers and their lifecycle
-- **Follow-ups** - Schedule and track follow-up activities for leads and customers
+- **Follow-ups** - Schedule and track follow-up activities
 - **Contact Persons** - Multiple contacts per business entity
 - **Users & Roles** - Role-based access control with granular permissions
-- **Businesses** - Multi-tenant business management
 
-### Entity Types
+### Projects
+
+Construction projects with comprehensive tracking:
+
+- **Basic Info**: Name, description, site address (street, city, state, zip)
+- **Timeline**: Start date, estimated end date, actual end date
+- **Budget**: Total budget tracking
+- **Progress**: Percentage completion (0-100%)
+- **Status**: draft, active, on_hold, completed, cancelled
+- **Relationships**: Linked to customer and assigned manager
+
+### Project Statuses
+
+- `draft` - Project created but not started
+- `active` - Project in progress
+- `on_hold` - Project temporarily paused
+- `completed` - Project finished
+- `cancelled` - Project cancelled
+
+### Customer Types
 
 Both Leads and Customers support two entity types:
 
-- **Individual** - Personal contacts with first name, last name, email, and phone
-- **Business** - Company entities with company name and multiple contact persons
+- **Individual** - Personal contacts with name, email, and phone
+- **Business** - Company entities with multiple contact persons
 
 ### Search & Filtering
 
-Both Leads and Customers support search functionality:
-- Search by first name, last name, company name
-- Search by email or phone
+Projects support search and filtering:
+- Search by project name, address, city, or customer name
+- Filter by status
 - Results are paginated
-
-### Lead Lifecycle
-
-Leads progress through the following statuses:
-- `new` - Newly created lead
-- `contacted` - Initial contact made
-- `qualified` - Lead qualified for sales
-- `proposal` - Proposal sent
-- `negotiation` - In negotiation
-- `won` - Deal closed successfully
-- `lost` - Deal lost
-
-Lead sources tracked:
-- `website`, `referral`, `social_media`, `advertisement`, `cold_call`, `trade_show`, `other`
 
 ### Lead to Customer Conversion
 
 When a lead reaches "won" status, it can be converted to a customer:
 - All lead data is copied to the new customer record
 - Contact persons are transferred for business entities
-- Original lead is marked as converted with reference to the customer
-- Converted leads cannot be modified or re-converted
-
-### Customer Lifecycle
-
-Customer statuses:
-- `active` - Active customer
-- `inactive` - Temporarily inactive
-- `churned` - Customer has left
-
-### Follow-ups
-
-Schedule and track follow-up activities for leads and customers:
-- **Status tracking**: pending, completed, cancelled
-- **Date scheduling**: Set follow-up dates with overdue detection
-- **Notes**: Add context and details for each follow-up
-- **Dashboard integration**: View upcoming and overdue follow-ups at a glance
-- **Polymorphic**: Works with both leads and customers
-- **Cascade delete**: Follow-ups are automatically deleted with their parent entity
-
-### Contact Persons
-
-Business entities (leads and customers) can have multiple contact persons:
-- Each contact has: name, email, phone, position, notes
-- One contact can be marked as **primary**
-- Contacts are automatically transferred during lead conversion
-- Contacts are cascade-deleted when the parent entity is deleted
+- Original lead is marked as converted
 
 ## Tech Stack
 
-- **Backend**: Laravel 11, PHP 8.2+
-- **Frontend**: React 18, Inertia.js
-- **Styling**: Tailwind CSS
-- **Database**: MySQL/SQLite
-- **Authentication**: Laravel Breeze
+- **Backend**: Laravel 12, PHP 8.2+
+- **Frontend**: React 19, Inertia.js
+- **Styling**: Tailwind CSS, Bootstrap 5
+- **Database**: MySQL
+- **Authentication**: Laravel built-in
 - **Authorization**: Spatie Laravel Permission
+- **Testing**: Pest PHP
 
 ## Installation
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd CRMBaseKit
+git clone https://github.com/prajnjasoftech/ConstructionProjectManager.git
+cd ConstructionProjectManager
 
 # Install dependencies
 composer install
@@ -98,6 +78,9 @@ npm install
 cp .env.example .env
 php artisan key:generate
 
+# Create database
+# Create a MySQL database named 'construction_project_manager'
+
 # Run migrations and seed data
 php artisan migrate --seed
 
@@ -105,19 +88,19 @@ php artisan migrate --seed
 npm run build
 
 # Start development server
-php artisan serve
+composer dev
 ```
 
-## Default Users
+## Development
 
-After seeding, the following users are available:
+```bash
+# Run all services concurrently (server, queue, logs, vite)
+composer dev
 
-| Email | Password | Role |
-|-------|----------|------|
-| admin@example.com | password | Super Admin |
-| manager@example.com | password | Manager |
-| sales@example.com | password | Sales |
-| user@example.com | password | User |
+# Or run individually
+php artisan serve
+npm run dev
+```
 
 ## Roles & Permissions
 
@@ -127,23 +110,42 @@ After seeding, the following users are available:
 - Can delete any record
 
 ### Admin
-- Manage users, businesses, leads, customers
+- Manage users, businesses, leads, customers, projects
 - Cannot delete users
 
 ### Manager
-- View and manage leads and customers
+- View and manage leads, customers, and projects
 - View users and businesses
 - Cannot delete records
 
 ### Sales
-- Create and edit leads and customers
-- Manage contact persons
+- Create and edit leads, customers, and projects
+- Manage contact persons and follow-ups
 - Cannot delete records
 
 ### User
-- View-only access to leads and customers
+- View-only access to leads, customers, and projects
 
 ## API Routes
+
+### Projects
+- `GET /projects` - List all projects
+- `GET /projects/create` - Show create form
+- `POST /projects` - Store new project
+- `GET /projects/{project}` - Show project details
+- `GET /projects/{project}/edit` - Show edit form
+- `PUT /projects/{project}` - Update project
+- `DELETE /projects/{project}` - Delete project
+- `POST /projects/{project}/status` - Update project status
+
+### Customers
+- `GET /customers` - List all customers
+- `GET /customers/create` - Show create form
+- `POST /customers` - Store new customer
+- `GET /customers/{customer}` - Show customer details
+- `GET /customers/{customer}/edit` - Show edit form
+- `PUT /customers/{customer}` - Update customer
+- `DELETE /customers/{customer}` - Delete customer
 
 ### Leads
 - `GET /leads` - List all leads
@@ -156,91 +158,70 @@ After seeding, the following users are available:
 - `GET /leads/{lead}/convert` - Show conversion form
 - `POST /leads/{lead}/convert` - Convert to customer
 
-### Customers
-- `GET /customers` - List all customers
-- `GET /customers/create` - Show create form
-- `POST /customers` - Store new customer
-- `GET /customers/{customer}` - Show customer details
-- `GET /customers/{customer}/edit` - Show edit form
-- `PUT /customers/{customer}` - Update customer
-- `DELETE /customers/{customer}` - Delete customer
-
-### Follow-ups (Leads)
-- `GET /leads/{lead}/follow-ups/create` - Show create form
-- `POST /leads/{lead}/follow-ups` - Store new follow-up
-- `GET /leads/{lead}/follow-ups/{followUp}/edit` - Show edit form
-- `PUT /leads/{lead}/follow-ups/{followUp}` - Update follow-up
-- `DELETE /leads/{lead}/follow-ups/{followUp}` - Delete follow-up
-- `POST /leads/{lead}/follow-ups/{followUp}/complete` - Mark as completed
-
-### Follow-ups (Customers)
-- `GET /customers/{customer}/follow-ups/create` - Show create form
-- `POST /customers/{customer}/follow-ups` - Store new follow-up
-- `GET /customers/{customer}/follow-ups/{followUp}/edit` - Show edit form
-- `PUT /customers/{customer}/follow-ups/{followUp}` - Update follow-up
-- `DELETE /customers/{customer}/follow-ups/{followUp}` - Delete follow-up
-- `POST /customers/{customer}/follow-ups/{followUp}/complete` - Mark as completed
+### Follow-ups
+- `GET /{entity}/{id}/follow-ups/create` - Show create form
+- `POST /{entity}/{id}/follow-ups` - Store new follow-up
+- `PUT /{entity}/{id}/follow-ups/{followUp}` - Update follow-up
+- `DELETE /{entity}/{id}/follow-ups/{followUp}` - Delete follow-up
+- `POST /{entity}/{id}/follow-ups/{followUp}/complete` - Mark as completed
 
 ### Contact Persons
-- `GET /leads/{lead}/contacts/create` - Create contact for lead
-- `POST /leads/{lead}/contacts` - Store contact for lead
-- `GET /customers/{customer}/contacts/create` - Create contact for customer
-- `POST /customers/{customer}/contacts` - Store contact for customer
-- `GET /contacts/{contact}/edit` - Edit contact
-- `PUT /contacts/{contact}` - Update contact
-- `DELETE /contacts/{contact}` - Delete contact
-- `POST /contacts/{contact}/set-primary` - Set as primary contact
+- `GET /{entity}/{id}/contacts/create` - Create contact
+- `POST /{entity}/{id}/contacts` - Store contact
+- `PUT /{entity}/{id}/contacts/{contact}` - Update contact
+- `DELETE /{entity}/{id}/contacts/{contact}` - Delete contact
+- `POST /{entity}/{id}/contacts/{contact}/set-primary` - Set as primary
 
 ## Testing
 
 ```bash
 # Run all tests
-php artisan test
+composer test
 
 # Run specific test file
-php artisan test tests/Feature/LeadTest.php
+php artisan test tests/Feature/ProjectTest.php
 
-# Run with coverage
-php artisan test --coverage
+# Run with filter
+php artisan test --filter=ProjectTest
+```
+
+## Code Quality
+
+```bash
+# Format code with Pint
+./vendor/bin/pint
+
+# Run static analysis with PHPStan
+./vendor/bin/phpstan analyse
+
+# Run all quality checks
+./vendor/bin/pint && ./vendor/bin/phpstan analyse && php artisan test
 ```
 
 ## Project Structure
 
 ```
 app/
-├── Enums/
-│   ├── EntityType.php          # Individual/Business enum
-│   ├── LeadStatus.php          # Lead status enum
-│   ├── LeadSource.php          # Lead source enum
-│   └── CustomerStatus.php      # Customer status enum
-├── Exceptions/
-│   └── ImmutableFieldException.php
 ├── Http/
 │   ├── Controllers/
-│   │   ├── DashboardController.php
-│   │   ├── FollowUpController.php
-│   │   ├── LeadController.php
-│   │   ├── CustomerController.php
+│   │   ├── ProjectController.php      # Project CRUD
+│   │   ├── CustomerController.php     # Customer CRUD
+│   │   ├── LeadController.php         # Lead CRUD
+│   │   ├── FollowUpController.php     # Follow-up management
 │   │   └── ContactPersonController.php
 │   └── Requests/
-│       ├── StoreFollowUpRequest.php
-│       ├── UpdateFollowUpRequest.php
-│       ├── StoreLeadRequest.php
-│       ├── UpdateLeadRequest.php
-│       ├── StoreCustomerRequest.php
-│       ├── UpdateCustomerRequest.php
-│       ├── StoreContactPersonRequest.php
-│       └── UpdateContactPersonRequest.php
+│       ├── StoreProjectRequest.php
+│       ├── UpdateProjectRequest.php
+│       └── ...
 ├── Models/
-│   ├── FollowUp.php
-│   ├── Lead.php
-│   ├── Customer.php
+│   ├── Project.php                    # Project model
+│   ├── Customer.php                   # Customer model
+│   ├── Lead.php                       # Lead model
+│   ├── FollowUp.php                   # Follow-up model
 │   └── ContactPerson.php
 ├── Policies/
-│   ├── FollowUpPolicy.php
-│   ├── LeadPolicy.php
-│   ├── CustomerPolicy.php
-│   └── ContactPersonPolicy.php
+│   ├── ProjectPolicy.php              # Project authorization
+│   └── ...
 └── Services/
     ├── FollowUpService.php
     └── ContactPersonService.php
@@ -249,28 +230,51 @@ resources/js/
 ├── Components/
 │   ├── FollowUpForm.jsx
 │   ├── FollowUpList.jsx
-│   ├── ContactPersonForm.jsx
-│   └── ContactPersonList.jsx
+│   └── ...
 └── Pages/
-    ├── Dashboard.jsx             # Shows upcoming/overdue follow-ups
-    ├── FollowUps/
-    │   ├── Create.jsx
-    │   └── Edit.jsx
-    ├── Leads/
-    │   ├── Index.jsx
-    │   ├── Create.jsx
-    │   ├── Show.jsx              # Includes follow-up management
-    │   ├── Edit.jsx
-    │   └── Convert.jsx
+    ├── Projects/
+    │   ├── Index.jsx                  # Project list
+    │   ├── Create.jsx                 # Create project form
+    │   ├── Show.jsx                   # Project details
+    │   └── Edit.jsx                   # Edit project form
     ├── Customers/
-    │   ├── Index.jsx
-    │   ├── Create.jsx
-    │   ├── Show.jsx              # Includes follow-up management
-    │   └── Edit.jsx
-    └── ContactPeople/
-        ├── Create.jsx
-        └── Edit.jsx
+    ├── Leads/
+    └── ...
+
+tests/Feature/
+├── ProjectTest.php                    # 33 tests
+├── CustomerTest.php                   # 37 tests
+├── LeadTest.php                       # 38 tests
+└── ...
 ```
+
+## Roadmap
+
+See [CLAUDE.md](CLAUDE.md) for the full development roadmap.
+
+### Phase 1 - MVP (Current)
+- [x] Projects CRUD
+- [x] Link projects to customers
+- [x] Project status management
+- [x] Basic project fields
+
+### Phase 2 - Coming Soon
+- [ ] Designs upload with version history
+- [ ] Milestones/phases
+- [ ] Project updates (photos/notes)
+- [ ] Approval workflow
+- [ ] Customer portal
+
+### Phase 3
+- [ ] Budget tracking & detailed expenses
+- [ ] Real-time chat
+- [ ] Documents upload
+- [ ] PDF reports
+
+### Phase 4
+- [ ] Payment tracking
+- [ ] Multi-company SaaS
+- [ ] Mobile app
 
 ## License
 

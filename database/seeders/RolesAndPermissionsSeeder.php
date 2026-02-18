@@ -49,6 +49,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit customers',
             'delete customers',
 
+            // Project Management
+            'view projects',
+            'create projects',
+            'edit projects',
+            'delete projects',
+
             // Contact Person Management
             'manage contact persons',
 
@@ -84,6 +90,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view businesses', 'create businesses', 'edit businesses', 'delete businesses',
             'view leads', 'create leads', 'edit leads', 'delete leads', 'convert leads',
             'view customers', 'create customers', 'edit customers', 'delete customers',
+            'view projects', 'create projects', 'edit projects', 'delete projects',
             'manage contact persons',
             'manage follow ups',
             'view news', 'create news', 'edit news', 'delete news', 'publish news',
@@ -97,6 +104,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view businesses', 'create businesses', 'edit businesses',
             'view leads', 'create leads', 'edit leads', 'convert leads',
             'view customers', 'create customers', 'edit customers',
+            'view projects', 'create projects', 'edit projects',
             'manage contact persons',
             'manage follow ups',
             'view news', 'create news', 'edit news',
@@ -107,6 +115,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $salesRole->givePermissionTo([
             'view leads', 'create leads', 'edit leads', 'convert leads',
             'view customers', 'create customers', 'edit customers',
+            'view projects', 'create projects', 'edit projects',
             'manage contact persons',
             'manage follow ups',
             'view news',
@@ -117,6 +126,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $userRole->givePermissionTo([
             'view leads',
             'view customers',
+            'view projects',
             'view news',
         ]);
     }

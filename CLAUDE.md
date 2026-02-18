@@ -101,13 +101,20 @@ A construction company project management system where customers get real-time u
 
 ## Development Phases
 
-### Phase 1 - MVP (Current)
-- [ ] Projects CRUD (create, update, status change)
-- [ ] Link projects to customers
-- [ ] View projects in customer listing
-- [ ] Basic project fields: name, customer, address, dates, status, budget
+### Phase 1 - MVP (COMPLETED)
+- [x] Projects CRUD (create, update, status change)
+- [x] Link projects to customers
+- [x] Project model with customer/manager relationships
+- [x] Basic project fields: name, customer, address, dates, status, budget, progress
+- [x] ProjectController with full CRUD + status update
+- [x] Form requests with validation
+- [x] ProjectPolicy for authorization
+- [x] React pages (Index, Create, Edit, Show)
+- [x] Comprehensive tests (33 tests, 174 assertions)
+- [x] Search by name, address, city, customer
+- [x] Filter by status
 
-### Phase 2
+### Phase 2 (Next)
 - [ ] Designs upload with version history
 - [ ] Milestones/phases
 - [ ] Project updates (photos/notes)
@@ -293,5 +300,16 @@ Each feature must include tests for:
 ---
 
 ## Current Status
-**Phase:** Planning complete, ready to start Phase 1 MVP
-**Next Step:** Create Project model with basic CRUD, link to customers
+**Phase:** Phase 1 MVP COMPLETED
+**Branch:** `feature/project-model` (pending merge to main)
+**Tests:** 217 total (33 new for Projects)
+**Next Step:** Merge PR, then start Phase 2 (Designs, Milestones, Updates)
+
+### Completed Features
+- Project model with full CRUD
+- Customer-Project relationship
+- Project status management
+- Progress percentage tracking
+- Search and filtering
+- Role-based authorization
+- Comprehensive test coverage
